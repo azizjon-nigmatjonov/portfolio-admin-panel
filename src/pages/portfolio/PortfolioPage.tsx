@@ -6,88 +6,69 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Button } from '@/shared/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog';
-import { Input } from '@/shared/components/ui/input';
-import { Label } from '@/shared/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/components/ui/select';
-import { Textarea } from '@/shared/components/ui/textarea';
+
 import { Badge } from '@/shared/components/ui/badge';
-import { Plus, X } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react';
 import { portfolioApi, type PortfolioItem } from '@/services/portfolioApi';
+import { PortfolioForm } from './Form';
 
 // Mock data for development
 const mockPortfolioData: PortfolioItem[] = [
   {
     id: '1',
-    title: 'E-commerce Website',
-    description: 'A modern e-commerce platform built with React and Node.js',
+    title: 'Iman Invest',
+    description: 'The panel optimizes cross-departmental workflows with modules for product management, warehouse operations and control of industrial knitting and paint machines.',
+    created_date: '2022',
+    tool: 'Next.js',
     category: 'Web Development',
+    stack: ['Next.js', 'Tailwind', 'Sass', 'E-commerce', 'TypeScript'],
+    tags: ['Next.js', 'Tailwind', 'Sass', 'E-commerce', 'TypeScript'],
     status: 'active',
-    createdAt: '2024-01-15T10:30:00Z',
-    updatedAt: '2024-01-20T14:45:00Z',
-    imageUrl: 'https://example.com/image1.jpg',
-    tags: ['React', 'Node.js', 'E-commerce', 'MongoDB'],
-  },
-  {
-    id: '2',
-    title: 'Mobile Banking App',
-    description: 'Secure mobile banking application for iOS and Android',
-    category: 'Mobile Development',
-    status: 'active',
-    createdAt: '2024-01-10T09:15:00Z',
-    updatedAt: '2024-01-18T16:20:00Z',
-    imageUrl: 'https://example.com/image2.jpg',
-    tags: ['React Native', 'TypeScript', 'Banking', 'Security'],
-  },
-  {
-    id: '3',
-    title: 'Data Analytics Dashboard',
-    description: 'Real-time analytics dashboard with interactive charts',
-    category: 'Data Science',
-    status: 'inactive',
-    createdAt: '2024-01-05T11:00:00Z',
-    updatedAt: '2024-01-12T13:30:00Z',
-    imageUrl: 'https://example.com/image3.jpg',
-    tags: ['Python', 'D3.js', 'Analytics', 'Dashboard'],
-  },
-  {
-    id: '4',
-    title: 'AI Chatbot',
-    description: 'Intelligent customer service chatbot using NLP',
-    category: 'Artificial Intelligence',
-    status: 'draft',
-    createdAt: '2024-01-20T15:45:00Z',
-    updatedAt: '2024-01-22T10:15:00Z',
-    tags: ['Python', 'NLP', 'AI', 'Chatbot'],
-  },
-  {
-    id: '5',
-    title: 'Cloud Infrastructure Setup',
-    description: 'Scalable cloud infrastructure using AWS services',
-    category: 'DevOps',
-    status: 'active',
-    createdAt: '2024-01-08T08:30:00Z',
-    updatedAt: '2024-01-25T12:00:00Z',
-    tags: ['AWS', 'Docker', 'Kubernetes', 'CI/CD'],
-  },
+    created_at: '2022-01-01',
+    updated_at: '2022-01-01',
+    problem_statement: 'The panel optimizes cross-departmental workflows with modules for product management, warehouse operations and control of industrial knitting and paint machines.',
+    production_detailed_statment: 'The panel optimizes cross-departmental workflows with modules for product management, warehouse operations and control of industrial knitting and paint machines.',
+    intro_statment: 'The panel optimizes cross-departmental workflows with modules for product management, warehouse operations and control of industrial knitting and paint machines.',
+    showing_image_url: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    showing_inner_image_url: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    problem_image_url: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    production_image_url_1: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    production_image_url_2: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    production_image_url_3: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    production_image_url_4: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+    next_project_image_url: 'https://framerusercontent.com/images/TTy0vkv0zZmRHic7ThXKOrJsBY.png',
+  }
 ];
 
 const columnHelper = createColumnHelper<PortfolioItem>();
 
-const columns = [
+const PortfolioPage: React.FC = () => {
+  const [data, setData] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [formData, setFormData] = useState<Partial<PortfolioItem>>({});
+
+  const handleEdit = (item: PortfolioItem) => {
+    setFormData(item);
+    setModalOpen(true);
+  };
+
+  const columns = [
+  columnHelper.display({
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleEdit(row.original)}
+        className="h-8 w-8 p-0"
+      >
+        <Edit className="h-4 w-4" />
+      </Button>
+    ),
+  }),
   columnHelper.accessor('title', {
     header: 'Title',
     cell: (info) => (
@@ -128,6 +109,110 @@ const columns = [
       );
     },
   }),
+  columnHelper.accessor('tool', {
+    header: 'Tool',
+    cell: (info) => (
+      <div className="text-sm text-gray-500">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('stack', {
+    header: 'Stack',
+    cell: (info) => (
+      <div className="text-sm text-gray-500">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('showing_image_url', {
+    header: 'Showing Image URL',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('showing_inner_image_url', {
+    header: 'Showing Inner Image URL',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('problem_image_url', {
+    header: 'Problem Image URL',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('production_image_url_1', {
+    header: 'Production Image URL 1',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('production_image_url_2', {
+    header: 'Production Image URL 2',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('production_image_url_3', {
+    header: 'Production Image URL 3',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('production_image_url_4', {
+    header: 'Production Image URL 4',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }), 
+  columnHelper.accessor('next_project_image_url', {
+    header: 'Next Project Image URL',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('created_date', {
+    header: 'Created Date',
+    cell: (info) => (
+      <div className="text-sm text-gray-500">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('created_at', {
+    header: 'Created At',
+    cell: (info) => (
+      <div className="text-sm text-gray-500">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('updated_at', {
+    header: 'Updated At',
+    cell: (info) => (
+      <div className="text-sm text-gray-500">
+        {info.getValue()}
+      </div>
+    ),
+  }),
   columnHelper.accessor('tags', {
     header: 'Tags',
     cell: (info) => (
@@ -145,7 +230,31 @@ const columns = [
       </div>
     ),
   }),
-  columnHelper.accessor('createdAt', {
+  columnHelper.accessor('problem_statement', {
+    header: 'Problem Statement',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('production_detailed_statment', {
+    header: 'Production Detailed Statement',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }),
+  columnHelper.accessor('intro_statment', {
+    header: 'Intro Statement',
+    cell: (info) => (
+      <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        {info.getValue()}
+      </div>
+    ),
+  }), 
+  columnHelper.accessor('created_at', {
     header: 'Created',
     cell: (info) => (
       <div className="text-sm text-gray-500">
@@ -153,7 +262,7 @@ const columns = [
       </div>
     ),
   }),
-  columnHelper.accessor('updatedAt', {
+  columnHelper.accessor('updated_at', {
     header: 'Updated',
     cell: (info) => (
       <div className="text-sm text-gray-500">
@@ -162,20 +271,6 @@ const columns = [
     ),
   }),
 ];
-
-const PortfolioPage: React.FC = () => {
-  const [data, setData] = useState<PortfolioItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: '',
-    status: 'draft' as 'active' | 'inactive' | 'draft',
-    tags: [] as string[],
-    imageUrl: '',
-  });
 
   useEffect(() => {
     const fetchPortfolioData = async () => {
@@ -204,6 +299,7 @@ const PortfolioPage: React.FC = () => {
   }, []);
 
   const handleModalOpen = () => {
+    setFormData({});
     setModalOpen(true);
   };
 
@@ -215,11 +311,20 @@ const PortfolioPage: React.FC = () => {
       category: '',
       status: 'draft',
       tags: [],
-      imageUrl: '',
+      showing_image_url: '',
+      showing_inner_image_url: '',
+      problem_image_url: '',
+      production_image_url_1: '',
+      production_image_url_2: '',
+      production_image_url_3: '',
+      production_image_url_4: '',
+      next_project_image_url: '',
+      tool: '',
+      stack: [],
     });
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value,
@@ -235,29 +340,7 @@ const PortfolioPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    try {
-      const newItem: PortfolioItem = {
-        id: Date.now().toString(),
-        ...formData,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-
-      // Try to create via API, fallback to local state update
-      try {
-        await portfolioApi.createPortfolioItem(newItem);
-        setData(prev => [...prev, newItem]);
-      } catch (apiError) {
-        console.warn('API not available, adding to local state:', apiError);
-        setData(prev => [...prev, newItem]);
-      }
-
-      handleModalClose();
-    } catch (err) {
-      console.error('Failed to create portfolio item:', err);
-    }
-  };
+  
 
   const table = useReactTable({
     data,
@@ -349,141 +432,11 @@ const PortfolioPage: React.FC = () => {
         Showing {data.length} portfolio items
       </div>
 
-      {/* Add Portfolio Item Modal */}
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add New Portfolio Item</DialogTitle>
-            <DialogDescription>
-              Create a new portfolio item to showcase your work.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
-                Title
-              </Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
-                className="col-span-3"
-                required
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="description" className="text-right mt-2">
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                className="col-span-3"
-                rows={3}
-                required
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="category" className="text-right">
-                Category
-              </Label>
-              <Input
-                id="category"
-                value={formData.category}
-                onChange={(e) => handleInputChange('category', e.target.value)}
-                className="col-span-3"
-                required
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
-                Status
-              </Label>
-              <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="imageUrl" className="text-right">
-                Image URL
-              </Label>
-              <Input
-                id="imageUrl"
-                value={formData.imageUrl}
-                onChange={(e) => handleInputChange('imageUrl', e.target.value)}
-                className="col-span-3"
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="tags" className="text-right">
-                Tags
-              </Label>
-              <Input
-                id="tags"
-                value={formData.tags.join(', ')}
-                onChange={handleTagsChange}
-                className="col-span-3"
-                placeholder="React, Node.js, TypeScript"
-              />
-            </div>
-            
-            {formData.tags.length > 0 && (
-              <div className="grid grid-cols-4 items-start gap-4">
-                <div className="text-right pt-2">
-                  <span className="text-sm text-gray-500">Preview</span>
-                </div>
-                <div className="col-span-3 flex flex-wrap gap-1">
-                  {formData.tags.map((tag, index) => (
-                    <Badge
-                      key={index}
-                      variant="outline"
-                      className="text-xs"
-                    >
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newTags = formData.tags.filter((_, i) => i !== index);
-                          setFormData(prev => ({ ...prev, tags: newTags }));
-                        }}
-                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleModalClose}>
-              Cancel
-            </Button>
-            <Button 
-              type="button"
-              onClick={handleSubmit}
-              disabled={!formData.title || !formData.description || !formData.category}
-            >
-              Add Item
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        <PortfolioForm 
+          formData={formData} 
+          handleModalClose={handleModalClose}
+          modalOpen={modalOpen}
+        />
     </div>
   );
 };

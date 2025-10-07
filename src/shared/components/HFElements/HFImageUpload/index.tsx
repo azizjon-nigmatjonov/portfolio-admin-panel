@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import type { Control, FieldValues, Path, RegisterOptions } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
 import { cn } from '@/shared/utils/cn';
+import { uploadApi } from '@/services/uploadApi';
 
 interface HFImageUploadProps<T extends FieldValues> {
   control: Control<T>;
@@ -12,7 +14,7 @@ interface HFImageUploadProps<T extends FieldValues> {
   helperText?: string;
   className?: string;
   rules?: RegisterOptions<T>;
-  handleChange?: (name: Path<T>, value: File | null) => void;
+  handleChange?: (name: Path<T>, value: string | null) => void;
   defaultValue?: string;
   accept?: string;
   maxSize?: number; // in MB
@@ -35,6 +37,19 @@ export const HFImageUpload = <T extends FieldValues>({
   const [preview, setPreview] = useState<string | null>(defaultValue);
   const [dragOver, setDragOver] = useState(false);
 
+  // Upload mutation
+  const uploadMutation = useMutation({
+    mutationFn: (file: File) => uploadApi.uploadImage(file),
+    onSuccess: (data) => {
+      console.log('Upload successful, image URL:', data.imageUrl);
+    },
+    onError: (error) => {
+      console.error('Upload failed:', error);
+      alert(`Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setPreview(null);
+    },
+  });
+
   const handleFileChange = (file: File | null, onChange: (value: any) => void) => {
     if (file) {
       // Validate file size
@@ -48,19 +63,30 @@ export const HFImageUpload = <T extends FieldValues>({
         alert('Please select an image file');
         return;
       }
-
+      console.log('file 111',file);
+      
       // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+      console.log('file 222',file);
+      // Upload the file
+      uploadMutation.mutate(file, {
+        onSuccess: (data) => {
+          // Pass the image URL to handleChange
+          console.log('data', data);
+          
+          onChange(data.imageUrl);
+          handleChange?.(name, data.imageUrl);
+        },
+      });
     } else {
       setPreview(null);
+      onChange(null);
+      handleChange?.(name, null);
     }
-
-    onChange(file);
-    handleChange?.(name, file);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -86,7 +112,7 @@ export const HFImageUpload = <T extends FieldValues>({
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -107,7 +133,7 @@ export const HFImageUpload = <T extends FieldValues>({
                   ? 'border-primary-500 bg-primary-50'
                   : 'border-gray-300 hover:border-gray-400',
                 error && 'border-red-300',
-                disabled && 'opacity-50 cursor-not-allowed'
+                (disabled || uploadMutation.isPending) && 'opacity-50 cursor-not-allowed'
               )}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -116,12 +142,19 @@ export const HFImageUpload = <T extends FieldValues>({
               <input
                 type="file"
                 accept={accept}
-                disabled={disabled}
+                disabled={disabled || uploadMutation.isPending}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null, onChange)}
               />
               
-              {preview ? (
+              {uploadMutation.isPending ? (
+                <div className="space-y-4">
+                  <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+                  </div>
+                  <p className="text-sm text-gray-600">Uploading image...</p>
+                </div>
+              ) : preview ? (
                 <div className="space-y-4">
                   <div className="flex justify-center">
                     <img
@@ -161,13 +194,18 @@ export const HFImageUpload = <T extends FieldValues>({
               )}
             </div>
 
+            {/* Upload Status */}
+            {uploadMutation.isPending && (
+              <p className="text-sm text-blue-600">Uploading to server...</p>
+            )}
+
             {/* Error Message */}
             {error && (
               <p className="text-sm text-red-600">{error.message}</p>
             )}
             
             {/* Helper Text */}
-            {helperText && !error && (
+            {helperText && !error && !uploadMutation.isPending && (
               <p className="text-sm text-gray-500">{helperText}</p>
             )}
           </div>

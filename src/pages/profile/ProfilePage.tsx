@@ -9,15 +9,20 @@ import { Button } from '@/shared/components/Button/Button';
 interface ProfileFormData {
   name: string;
   email: string;
+  work_experience: string;
   role: string;
   id: string;
+  about_me: string;
   profilePicture?: File | string;
+  linkedin_url: string;
+  github_url: string;
+  resume_url: string;
 }
 
 const ProfilePage: React.FC = () => {
   const { userInfo, isLoading, isUpdating, updateUserProfile } = useProfileLogic();
   const { error } = useAuthStore();
-  
+
   const {
     control,
     handleSubmit,
@@ -27,9 +32,14 @@ const ProfilePage: React.FC = () => {
     defaultValues: {
       name: '',
       email: '',
+      work_experience: '',
       role: '',
       id: '',
-      profilePicture: ''
+      profilePicture: '',
+      about_me: '',
+      linkedin_url: '',
+      github_url: '',
+      resume_url: ''
     }
   });
 
@@ -41,7 +51,12 @@ const ProfilePage: React.FC = () => {
         email: userInfo.email || '',
         role: userInfo.role || '',
         id: userInfo.id || '',
-        profilePicture: userInfo.profilePicture || ''
+        profilePicture: userInfo.profilePicture || '',
+        work_experience: userInfo.work_experience || '',
+        about_me: userInfo.about_me || '',
+        linkedin_url: userInfo.linkedin_url || '',
+        github_url: userInfo.github_url || '',
+        resume_url: userInfo.resume_url || ''
       });
     }
   }, [userInfo, reset]);
@@ -50,7 +65,12 @@ const ProfilePage: React.FC = () => {
     try {
       const updateData: any = {
         name: data.name,
-        email: data.email
+        email: data.email,
+        work_experience: data.work_experience,
+        about_me: data.about_me,
+        linkedin_url: data.linkedin_url,
+        github_url: data.github_url,
+        resume_url: data.resume_url,
       };
 
       // Handle profilePicture upload if it's a File object
@@ -79,7 +99,7 @@ const ProfilePage: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="space-y-6">
       <div>
@@ -107,7 +127,7 @@ const ProfilePage: React.FC = () => {
                   }
                 }}
               />
-              
+
               <HFInput
                 control={control}
                 name="email"
@@ -123,7 +143,84 @@ const ProfilePage: React.FC = () => {
                   }
                 }}
               />
-              
+
+              <HFInput
+                control={control}
+                name="about_me"
+                label="About Me"
+                placeholder="Enter your about me"
+                required
+                rules={{
+                  required: 'About Me is required',
+                  minLength: {
+                    value: 10,
+                    message: 'About Me must be at least 10 characters'
+                  }
+                }}
+              />
+
+
+              <HFInput
+                control={control}
+                name="work_experience"
+                label="Work Experience"
+                placeholder="Enter your work experience"
+                required
+                rules={{
+                  required: 'Work Experience is required',
+                  minLength: {
+                    value: 4,
+                    message: 'Work Experience must be at least 4 characters'
+                  }
+                }}
+              />
+
+              <HFInput
+                control={control}
+                name="linkedin_url"
+                label="Linkedin URL"
+                placeholder="Enter your linkedin url"
+                required
+                rules={{
+                  required: 'Linkedin URL is required',
+                  minLength: {
+                    value: 5,
+                    message: 'Linkedin URL must be at least 5 characters'
+                  }
+                }}
+              />
+
+              <HFInput
+                control={control}
+                name="github_url"
+                label="Github URL"
+                placeholder="Enter your github url"
+                required
+                rules={{
+                  required: 'Github URL is required',
+                  minLength: {
+                    value: 5,
+                    message: 'Github URL must be at least 5 characters'
+                  }
+                }}
+              />
+
+              <HFInput
+                control={control}
+                name="resume_url"
+                label="Resume URL"
+                placeholder="Enter your resume url"
+                required
+                rules={{
+                  required: 'Resume URL is required',
+                  minLength: {
+                    value: 5,
+                    message: 'Resume URL must be at least 5 characters'
+                  }
+                }}
+              />
+
+
               <HFInput
                 control={control}
                 name="role"
@@ -132,7 +229,7 @@ const ProfilePage: React.FC = () => {
                 disabled // Role usually shouldn't be editable by user
                 helperText="Role is managed by administrators"
               />
-              
+
               <HFInput
                 control={control}
                 name="id"

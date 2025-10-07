@@ -47,16 +47,16 @@ class TokenService {
   /**
    * Get authorization header for API requests
    * @param forceRefresh - Whether to force refresh the token
-   * @returns Promise<{ Authorization: string } | null> - Authorization header or null
+   * @returns Promise<{ authtoken: string } | null> - Auth token header or null
    */
-  async getAuthHeader(forceRefresh: boolean = false): Promise<{ Authorization: string } | null> {
+  async getAuthHeader(forceRefresh: boolean = false): Promise<{ authtoken: string } | null> {
     const token = await this.getIdToken(forceRefresh);
     if (!token) {
       return null;
     }
 
     return {
-      Authorization: `Bearer ${token}`,
+      authtoken: token,
     };
   }
 

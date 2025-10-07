@@ -8,8 +8,8 @@ interface RequestConfig extends RequestInit {
 class ApiClient {
   private baseURL: string;
 
-  constructor(baseURL: string = '/api') {
-    this.baseURL = baseURL;
+  constructor() {
+    this.baseURL = import.meta.env.VITE_BASE_URL || '/api';
   }
 
   private async request<T>(

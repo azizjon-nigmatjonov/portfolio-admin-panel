@@ -27,6 +27,7 @@ export interface InputProps extends BaseComponentProps {
   onChange?: (value: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export interface ModalProps extends BaseComponentProps {
