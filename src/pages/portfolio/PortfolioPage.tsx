@@ -324,22 +324,6 @@ const PortfolioPage: React.FC = () => {
     });
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleTagsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const tags = value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-    setFormData(prev => ({
-      ...prev,
-      tags,
-    }));
-  };
-
   
 
   const table = useReactTable({
