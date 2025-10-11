@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { authApi } from "@/features/auth/api/authApi";
 import { useAuthStore } from "@/features/auth/store/authSlice";
 import type { UserInfo } from "@/features/auth/types/auth.types";
