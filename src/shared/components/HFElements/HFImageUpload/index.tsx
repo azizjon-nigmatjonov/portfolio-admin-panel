@@ -63,24 +63,28 @@ export const HFImageUpload = <T extends FieldValues>({
         alert('Please select an image file');
         return;
       }
-      console.log('file 111',file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
-      console.log('file 222',file);
+      
       // Upload the file
       uploadMutation.mutate(file, {
         onSuccess: (data) => {
-          // Pass the image URL to handleChange
-          console.log('data', data);
-          
-          onChange(data.imageUrl);
-          handleChange?.(name, data.imageUrl);
+  
+          if (data.imageUrl) {
+            onChange(data.imageUrl);
+            handleChange?.(name, data.imageUrl);
+          }
         },
+        onError: (error) => {
+          console.error('Upload failed:', error);
+          alert(`Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          setPreview(null);
+        }
       });
     } else {
       setPreview(null);

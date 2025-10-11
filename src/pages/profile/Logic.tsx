@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { authApi } from "@/features/auth/api/authApi";
 import { useAuthStore } from "@/features/auth/store/authSlice";
 import type { UserInfo } from "@/features/auth/types/auth.types";
@@ -8,7 +8,7 @@ export const useProfileLogic = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -21,7 +21,7 @@ export const useProfileLogic = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [setUserInfo, setError, setIsLoading]);
 
   const updateUserProfile = async (profileData: Partial<UserInfo>) => {
     try {
@@ -39,13 +39,6 @@ export const useProfileLogic = () => {
       setIsUpdating(false);
     }
   };
-
-  useEffect(() => {
-    // Only fetch if we don't have userInfo yet
-    if (!userInfo) {
-      fetchUserInfo();
-    }
-  }, [userInfo]);
 
   return {
     userInfo,

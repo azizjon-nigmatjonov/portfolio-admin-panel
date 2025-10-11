@@ -23,6 +23,8 @@ const ProfilePage: React.FC = () => {
   const { userInfo, isLoading, isUpdating, updateUserProfile } = useProfileLogic();
   const { error } = useAuthStore();
 
+  console.log('userInfo', userInfo);
+  
   const {
     control,
     handleSubmit,
@@ -71,6 +73,8 @@ const ProfilePage: React.FC = () => {
         linkedin_url: data.linkedin_url,
         github_url: data.github_url,
         resume_url: data.resume_url,
+        profilePicture: data.profilePicture,
+        role: data.role,
       };
 
       // Handle profilePicture upload if it's a File object
@@ -240,15 +244,10 @@ const ProfilePage: React.FC = () => {
               />
 
               <HFImageUpload
-                control={control}
-                name="profilePicture"
-                label="Profile Image"
-                helperText="Upload a profile picture (PNG, JPG, GIF up to 5MB)"
-                rules={{
-                  required: false,
-                }}
-                defaultValue={userInfo.profilePicture || ''}
-                maxSize={5}
+                 control={control}
+                 name="profilePicture"
+                 label="Profile Image"
+                 defaultValue={userInfo.profilePicture as string}
               />
 
               <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">

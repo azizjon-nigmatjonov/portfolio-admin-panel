@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useSidebar } from '@/app/store';
 import { Button } from '@/shared/components/Button/Button';
 import { useProfileLogic } from '@/pages/profile/Logic';
 
 export const Header: React.FC = () => {
-  const {    logout } = useAuth();
-  const { userInfo } = useProfileLogic();
+  const { logout } = useAuth();
+  const { userInfo, fetchUserInfo } = useProfileLogic();
   const { toggleSidebar } = useSidebar();
 
   const handleLogout = async () => {
     await logout();
   };
+
+  useEffect(() => {
+    (async () => {
+      await fetchUserInfo();
+    })();
+  }, []);
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
@@ -27,7 +33,7 @@ export const Header: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            
+
             <div className="text-sm text-gray-500">
               Welcome back, <span className="font-medium text-gray-900">{userInfo?.name}</span>
             </div>
@@ -55,7 +61,7 @@ export const Header: React.FC = () => {
                     {userInfo?.profilePicture ? (
                       <img src={userInfo?.profilePicture} alt="Profile" className="h-8 w-8 rounded-full object-cover" />
                     ) : (
-                    <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium text-white">
                         {userInfo?.name?.charAt(0).toUpperCase()}
                       </span>
                     )}
