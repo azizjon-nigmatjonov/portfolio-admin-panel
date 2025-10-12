@@ -147,8 +147,8 @@ const PortfolioPage: React.FC = () => {
     columnHelper.accessor('showing_image_url', {
       header: 'Showing Image URL',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img className='w-10 h-10' src={info.getValue()} alt="showing image" />
         </div>
       ),
     }),
