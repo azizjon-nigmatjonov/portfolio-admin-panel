@@ -30,6 +30,13 @@ const PortfolioPage: React.FC = () => {
   const [formData, setFormData] = useState<Partial<PortfolioItem>>({});
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<PortfolioItem | null>(null);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
+
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setImageModalOpen(true);
+  };
 
   const handleEdit = (item: PortfolioItem) => {
     console.log('item', item);
@@ -148,63 +155,98 @@ const PortfolioPage: React.FC = () => {
       header: 'Showing Image URL',
       cell: (info) => (
         <div>
-          <img className='w-10 h-10' src={info.getValue()} alt="showing image" />
+          <img className='w-10 h-10 object-cover' src={info.getValue()} alt="showing image" />
         </div>
       ),
     }),
     columnHelper.accessor('showing_inner_image_url', {
-      header: 'Showing Inner Image URL',
+      header: 'Inner Image',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="showing inner image" 
+          />
         </div>
       ),
     }),
     columnHelper.accessor('problem_image_url', {
-      header: 'Problem Image URL',
+      header: 'Problem Image',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="problem image" 
+          />
         </div>
       ),
     }),
     columnHelper.accessor('production_image_url_1', {
-      header: 'Production Image URL 1',
+      header: 'Production 1',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="production image 1" 
+          />
         </div>
       ),
     }),
     columnHelper.accessor('production_image_url_2', {
-      header: 'Production Image URL 2',
+      header: 'Production 2',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="production image 2" 
+          />
         </div>
       ),
     }),
     columnHelper.accessor('production_image_url_3', {
-      header: 'Production Image URL 3',
+      header: 'Production 3',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="production image 3" 
+          />
         </div>
       ),
     }),
     columnHelper.accessor('production_image_url_4', {
-      header: 'Production Image URL 4',
+      header: 'Production 4',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="production image 4" 
+          />
         </div>
       ),
     }),
     columnHelper.accessor('next_project_image_url', {
-      header: 'Next Project Image URL',
+      header: 'Next Project',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
-          {info.getValue()}
+        <div>
+          <img 
+            onClick={() => handleImageClick(info.getValue())} 
+            className='w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity' 
+            src={info.getValue()} 
+            alt="next project image" 
+          />
         </div>
       ),
     }),
@@ -462,6 +504,27 @@ const PortfolioPage: React.FC = () => {
               Yes, Delete
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Image Preview Modal */}
+      <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+          <div className="relative">
+            <img 
+              src={selectedImage} 
+              alt="Preview" 
+              className="w-full h-auto max-h-[85vh] object-contain"
+            />
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute top-4 right-4 bg-white/90 hover:bg-white"
+              onClick={() => setImageModalOpen(false)}
+            >
+              <span className="text-xl">×</span>
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
