@@ -15,7 +15,7 @@ import { HFInput } from '@/shared/components/HFElements/HFInput';
 import { HFTextarea } from '@/shared/components/HFElements/HFTextarea';
 import { HFSelect } from '@/shared/components/HFElements/HFSelect';
 import { HFImageUpload } from '@/shared/components/HFElements/HFImageUpload';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge } from '@/shared/components/ui/badge';
 import { X } from 'lucide-react';
 import { Label } from '@/shared/components/ui/label';
@@ -68,6 +68,12 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
           next_project_image_url: formData.next_project_image_url || '',
     } as PortfolioItem,
   });
+
+  useEffect(() => {
+    if (formData) {
+      reset(formData);
+    }
+  }, [formData, reset]);
 
   const onSubmit = async (data: PortfolioItem) => {
     try {
@@ -123,7 +129,8 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
   const handleRemoveStack = (stackToRemove: string) => {
     setStack(stack.filter(item => item !== stackToRemove));
   };
-
+  console.log('formData', formData?.title);
+  
   return (
     <Dialog open={modalOpen} onOpenChange={handleModalClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
