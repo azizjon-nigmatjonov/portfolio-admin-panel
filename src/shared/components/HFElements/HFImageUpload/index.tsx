@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import type { Control, FieldValues, Path, RegisterOptions } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
@@ -36,8 +36,6 @@ export const HFImageUpload = <T extends FieldValues>({
 }: HFImageUploadProps<T>) => {
   const [preview, setPreview] = useState<string | null>(defaultValue);
   const [dragOver, setDragOver] = useState(false);
-
-  // Upload mutation
   const uploadMutation = useMutation({
     mutationFn: (file: File) => uploadApi.uploadImage(file),
     onSuccess: (data) => {
@@ -70,11 +68,11 @@ export const HFImageUpload = <T extends FieldValues>({
         setPreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
-      
+
       // Upload the file
       uploadMutation.mutate(file, {
         onSuccess: (data) => {
-  
+
           if (data.imageUrl) {
             onChange(data.imageUrl);
             handleChange?.(name, data.imageUrl);
@@ -106,7 +104,7 @@ export const HFImageUpload = <T extends FieldValues>({
   const handleDrop = (e: React.DragEvent, onChange: (value: any) => void) => {
     e.preventDefault();
     setDragOver(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       handleFileChange(files[0], onChange);
@@ -121,14 +119,22 @@ export const HFImageUpload = <T extends FieldValues>({
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
-      
+
       <Controller
         control={control}
         name={name}
         defaultValue={defaultValue as any}
         rules={rules}
-        render={({ field: { onChange }, fieldState: { error } }) => (
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
           <div className="space-y-2">
+            <input
+              type="url"
+              value={value as string}
+              onChange={(e) => onChange(e.target.value)}
+              disabled={disabled || uploadMutation.isPending}
+              className='border border-gray-300 rounded-md p-2 w-full'
+              placeholder='Enter image URL by hand or upload image'
+            />
             {/* Upload Area */}
             <div
               className={cn(
@@ -143,6 +149,7 @@ export const HFImageUpload = <T extends FieldValues>({
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, onChange)}
             >
+
               <input
                 type="file"
                 accept={accept}
@@ -150,8 +157,14 @@ export const HFImageUpload = <T extends FieldValues>({
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null, onChange)}
               />
-              
-              {uploadMutation.isPending ? (
+
+              {value ? <div className="flex justify-center">
+                <img
+                  src={value as string}
+                  alt="Preview"
+                  className="h-32 w-32 rounded-lg object-cover border border-gray-200"
+                />
+              </div> : uploadMutation.isPending ? (
                 <div className="space-y-4">
                   <div className="flex justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -207,7 +220,7 @@ export const HFImageUpload = <T extends FieldValues>({
             {error && (
               <p className="text-sm text-red-600">{error.message}</p>
             )}
-            
+
             {/* Helper Text */}
             {helperText && !error && !uploadMutation.isPending && (
               <p className="text-sm text-gray-500">{helperText}</p>

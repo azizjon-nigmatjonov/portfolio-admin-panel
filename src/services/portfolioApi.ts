@@ -5,6 +5,7 @@ export interface PortfolioItem {
   id: string;
   title: string;
   description: string;
+  release_date: string;
   created_date: string;
   tool: string;
   category: string;

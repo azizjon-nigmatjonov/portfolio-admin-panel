@@ -129,7 +129,7 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
   const handleRemoveStack = (stackToRemove: string) => {
     setStack(stack.filter(item => item !== stackToRemove));
   };
-  console.log('formData', formData?.title);
+  console.log('formData', formData?.showing_image_url);
   
   return (
     <Dialog open={modalOpen} onOpenChange={handleModalClose}>
@@ -151,6 +151,13 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
                 name="title"
                 label="Title"
                 placeholder="Enter project title"
+                required
+              />
+                 <HFInput
+                control={control}
+                name="release_date"
+                label="Release Date"
+                placeholder="Enter release date"
                 required
               />
               <HFSelect
