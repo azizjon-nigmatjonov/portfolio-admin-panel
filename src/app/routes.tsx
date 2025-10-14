@@ -6,6 +6,7 @@ import { DashboardLayout } from '@/layouts/DashboardLayout';
 
 // Import PortfolioPage directly to test dynamic import issue
 import PortfolioPage from '@/pages/portfolio/PortfolioPage';
+import ImageListPage from '@/pages/images/ImageListPage';
 
 // Lazy load pages for code splitting
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
@@ -72,6 +73,20 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <SettingsPage />,
+      },
+    ],
+  },
+  {
+    path: '/images',
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <ImageListPage />,
       },
     ],
   },
