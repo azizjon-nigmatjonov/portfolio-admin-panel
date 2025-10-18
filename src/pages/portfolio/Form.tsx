@@ -159,7 +159,6 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
                 name="url"
                 label="URL"
                 placeholder="Enter project URL"
-                required
               />
                  <HFInput
                 control={control}
