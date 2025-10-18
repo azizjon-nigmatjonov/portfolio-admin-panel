@@ -103,6 +103,14 @@ const PortfolioPage: React.FC = () => {
         </div>
       ),
     }),
+    columnHelper.accessor('url', {
+      header: 'URL',
+      cell: (info) => (
+        <div className="text-sm text-gray-500">
+          {info.getValue()}
+        </div>
+      ),
+    }),
     columnHelper.accessor('description', {
       header: 'Description',
       cell: (info) => (
@@ -381,6 +389,7 @@ const PortfolioPage: React.FC = () => {
       next_project_image_url: '',
       tool: '',
       stack: [],
+      url: '',
     });
     fetchPortfolioData();
   };

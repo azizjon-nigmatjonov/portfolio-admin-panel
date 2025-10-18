@@ -25,6 +25,7 @@ export interface PortfolioItem {
   production_image_url_3: string;
   production_image_url_4: string;
   next_project_image_url: string;
+  url: string;
 }
 
 // Portfolio API service

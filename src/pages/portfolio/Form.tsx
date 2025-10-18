@@ -66,6 +66,7 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
           production_image_url_3: formData.production_image_url_3 || '',
           production_image_url_4: formData.production_image_url_4 || '',
           next_project_image_url: formData.next_project_image_url || '',
+          url: formData.url || '',
     } as PortfolioItem,
   });
 
@@ -151,6 +152,13 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
                 name="title"
                 label="Title"
                 placeholder="Enter project title"
+                required
+              />
+              <HFInput
+                control={control}
+                name="url"
+                label="URL"
+                placeholder="Enter project URL"
                 required
               />
                  <HFInput
