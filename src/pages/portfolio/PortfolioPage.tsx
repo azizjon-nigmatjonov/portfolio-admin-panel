@@ -302,7 +302,10 @@ const PortfolioPage: React.FC = () => {
     columnHelper.accessor('problem_statement', {
       header: 'Problem Statement',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        <div 
+          className="text-sm text-gray-500 truncate max-w-[300px]" 
+          title={info.getValue()}
+        >
           {info.getValue()}
         </div>
       ),
@@ -310,7 +313,10 @@ const PortfolioPage: React.FC = () => {
     columnHelper.accessor('production_detailed_statment', {
       header: 'Production Detailed Statement',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        <div 
+          className="text-sm text-gray-500 truncate max-w-[300px]" 
+          title={info.getValue()}
+        >
           {info.getValue()}
         </div>
       ),
@@ -318,7 +324,10 @@ const PortfolioPage: React.FC = () => {
     columnHelper.accessor('intro_statment', {
       header: 'Intro Statement',
       cell: (info) => (
-        <div className="text-sm text-gray-500 whitespace-normal min-w-[300px]">
+        <div 
+          className="text-sm text-gray-500 truncate max-w-[300px]" 
+          title={info.getValue()}
+        >
           {info.getValue()}
         </div>
       ),
