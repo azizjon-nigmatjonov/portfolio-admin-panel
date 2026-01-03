@@ -21,7 +21,7 @@ import { X } from 'lucide-react';
 import { Label } from '@/shared/components/ui/label';
 import { Input } from '@/shared/components/ui/input';
 
-interface Props { 
+interface Props {
   formData: Partial<PortfolioItem>;
   handleModalClose: () => void;
   modalOpen: boolean;
@@ -47,26 +47,27 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
   const [stack, setStack] = useState<string[]>(formData.stack || []);
   const [tagInput, setTagInput] = useState('');
   const [stackInput, setStackInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { control, handleSubmit, reset, formState: { isDirty } } = useForm<PortfolioItem>({
     defaultValues: {
-          title: formData.title || '',
-          description: formData.description || '',
-          category: formData.category || '',
-          status: formData.status || 'draft',
-          tool: formData.tool || '',
-          problem_statement: formData.problem_statement || '',
-          production_detailed_statment: formData.production_detailed_statment || '',
-          intro_statment: formData.intro_statment || '',
-          showing_image_url: formData.showing_image_url || '',
-          showing_inner_image_url: formData.showing_inner_image_url || '',
-          problem_image_url: formData.problem_image_url || '',
-          production_image_url_1: formData.production_image_url_1 || '',
-          production_image_url_2: formData.production_image_url_2 || '',
-          production_image_url_3: formData.production_image_url_3 || '',
-          production_image_url_4: formData.production_image_url_4 || '',
-          next_project_image_url: formData.next_project_image_url || '',
-          url: formData.url || '',
+      title: formData.title || '',
+      description: formData.description || '',
+      category: formData.category || '',
+      status: formData.status || 'draft',
+      tool: formData.tool || '',
+      problem_statement: formData.problem_statement || '',
+      production_detailed_statment: formData.production_detailed_statment || '',
+      intro_statment: formData.intro_statment || '',
+      showing_image_url: formData.showing_image_url || '',
+      showing_inner_image_url: formData.showing_inner_image_url || '',
+      problem_image_url: formData.problem_image_url || '',
+      production_image_url_1: formData.production_image_url_1 || '',
+      production_image_url_2: formData.production_image_url_2 || '',
+      production_image_url_3: formData.production_image_url_3 || '',
+      production_image_url_4: formData.production_image_url_4 || '',
+      next_project_image_url: formData.next_project_image_url || '',
+      url: formData.url || '',
     } as PortfolioItem,
   });
 
@@ -78,6 +79,7 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
 
   const onSubmit = async (data: PortfolioItem) => {
     try {
+      setIsLoading(true);
       const portfolioData: PortfolioItem = {
         ...data,
         tags,
@@ -100,6 +102,8 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
       handleModalClose();
     } catch (err) {
       console.error(`Failed to ${isEditMode ? 'update' : 'create'} portfolio item:`, err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -130,8 +134,7 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
   const handleRemoveStack = (stackToRemove: string) => {
     setStack(stack.filter(item => item !== stackToRemove));
   };
-  console.log('formData', formData?.showing_image_url);
-  
+
   return (
     <Dialog open={modalOpen} onOpenChange={handleModalClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
@@ -160,7 +163,7 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
                 label="URL"
                 placeholder="Enter project URL"
               />
-                 <HFInput
+              <HFInput
                 control={control}
                 name="release_date"
                 label="Release Date"
@@ -342,9 +345,9 @@ export const PortfolioForm = ({ formData, handleModalClose, modalOpen }: Props) 
             </Button>
             <Button
               type="submit"
-              disabled={!isDirty}
+              disabled={!isDirty || isLoading}
             >
-              {isEditMode ? 'Update Item' : 'Add Item'}
+              {isLoading ? 'Saving...' : isEditMode ? 'Update Item' : 'Add Item'}
             </Button>
           </DialogFooter>
         </form>
