@@ -5,7 +5,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { Trash2 } from 'lucide-react';
 import { imagesApi, type ImageItem } from '@/services/imagesApi';
+import { Button } from '@/shared/components/ui/button';
 
 const columnHelper = createColumnHelper<ImageItem>();
 
@@ -13,8 +15,44 @@ const ImageListPage: React.FC = () => {
   const [data, setData] = useState<ImageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleDelete = async (item: ImageItem) => {
+    if (!confirm(`Are you sure you want to delete "${item.url}"?`)) {
+      return;
+    }
+
+    try {
+      setDeletingId(item._id);
+      await imagesApi.deleteImageByUrl(item.url);
+      // Refresh the data after deletion
+      fetchImagesData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete image');
+      console.error('Failed to delete image:', err);
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const columns = [
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleDelete(row.original)}
+            disabled={deletingId === row.original._id}
+            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    }),
     columnHelper.accessor('_id', {
       header: 'ID',
       cell: (info) => (
@@ -65,8 +103,8 @@ const ImageListPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const apiData: any = await imagesApi.getImagesList();
-      setData(apiData?.images || []);
+      const apiData = await imagesApi.getImagesList();
+      setData(Array.isArray(apiData) ? apiData : (apiData as { images?: ImageItem[] })?.images || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load images data');
       console.error('Failed to fetch images:', err);
