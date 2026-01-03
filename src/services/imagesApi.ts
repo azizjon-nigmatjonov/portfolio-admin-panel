@@ -28,7 +28,7 @@ export const imagesApi = {
 
   // Delete an image by URL
   async deleteImageByUrl(imageId: string): Promise<void> {
-    return apiClient.post<void>('/delete-image', { imageId: imageId });
+    return apiClient.delete<void>(`/images/${imageId}`);
   },
 };
 
