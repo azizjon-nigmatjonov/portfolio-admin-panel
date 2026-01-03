@@ -18,13 +18,13 @@ const ImageListPage: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = async (item: ImageItem) => {
-    if (!confirm(`Are you sure you want to delete "${item.url}"?`)) {
+    if (!confirm(`Are you sure you want to delete "${item._id}"?`)) {
       return;
     }
 
     try {
       setDeletingId(item._id);
-      await imagesApi.deleteImageByUrl(item.url);
+      await imagesApi.deleteImageByUrl(item._id);
       // Refresh the data after deletion
       fetchImagesData();
     } catch (err) {
