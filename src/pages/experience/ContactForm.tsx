@@ -33,7 +33,7 @@ export const ContactForm: React.FC<Props> = ({ formData, handleModalClose, modal
   const isEditMode = formData && (formData._id || formData.id);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { control, handleSubmit, reset, watch, setValue, formState: { isDirty } } = useForm<Contact>({
+  const { control, handleSubmit, reset, watch, setValue, } = useForm<Contact>({
     defaultValues: {
       id: formData.id || '',
       type: formData.type || 'email',

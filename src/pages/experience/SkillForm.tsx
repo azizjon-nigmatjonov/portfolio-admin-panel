@@ -34,7 +34,7 @@ export const SkillForm: React.FC<Props> = ({ formData, handleModalClose, modalOp
   const isEditMode = formData && (formData._id || formData.id);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { control, handleSubmit, reset, formState: { isDirty } } = useForm<Skill>({
+  const { control, handleSubmit, reset } = useForm<Skill>({
     defaultValues: {
       id: formData.id || '',
       name: formData.name || '',
@@ -116,8 +116,6 @@ export const SkillForm: React.FC<Props> = ({ formData, handleModalClose, modalOp
             label="Proficiency"
             placeholder="0-100"
             type="number"
-            min="0"
-            max="100"
             required
             helperText="Enter a number between 0 and 100"
           />

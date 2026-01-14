@@ -24,7 +24,7 @@ export const AboutMeForm: React.FC<Props> = ({ formData, handleModalClose, modal
   const isEditMode = formData && formData._id;
   const [isLoading, setIsLoading] = useState(false);
 
-  const { control, handleSubmit, reset, formState: { isDirty } } = useForm<AboutMe>({
+  const { control, handleSubmit, reset, } = useForm<AboutMe>({
     defaultValues: {
       title: formData.title || 'About Me',
       content: formData.content || '',

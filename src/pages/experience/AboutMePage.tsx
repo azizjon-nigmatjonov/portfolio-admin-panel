@@ -2,13 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/shared/components/ui/button';
 import { aboutMeApi, type AboutMe } from '@/services/experienceApi';
 import { AboutMeForm } from './AboutMeForm';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog';
 
 const AboutMePage: React.FC = () => {
   const [data, setData] = useState<AboutMe | null>(null);

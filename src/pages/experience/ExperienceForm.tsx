@@ -29,7 +29,7 @@ export const ExperienceForm: React.FC<Props> = ({ formData, handleModalClose, mo
   const [techInput, setTechInput] = useState('');
   const [achievementInput, setAchievementInput] = useState('');
 
-  const { control, handleSubmit, reset, watch, formState: { isDirty } } = useForm<Experience>({
+  const { control, handleSubmit, reset } = useForm<Experience>({
     defaultValues: {
       id: formData.id || '',
       company: formData.company || '',

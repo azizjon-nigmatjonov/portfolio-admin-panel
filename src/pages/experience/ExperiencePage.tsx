@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/shared/components/ui/button';
 import { User, Mail, Briefcase, Code } from 'lucide-react';
 
 const ExperiencePage: React.FC = () => {
