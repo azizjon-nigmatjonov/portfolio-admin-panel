@@ -12,6 +12,7 @@ import AboutMePage from '@/pages/experience/AboutMePage';
 import ContactsPage from '@/pages/experience/ContactsPage';
 import ExperiencesPage from '@/pages/experience/ExperiencesPage';
 import SkillsPage from '@/pages/experience/SkillsPage';
+import BlogListPage from '@/pages/blog/BlogListPage';
 
 // Lazy load pages for code splitting
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
@@ -122,6 +123,20 @@ export const router = createBrowserRouter([
       {
         path: 'skills',
         element: <SkillsPage />,
+      },
+    ],
+  },
+  {
+    path: '/blog',
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <BlogListPage />,
       },
     ],
   },
