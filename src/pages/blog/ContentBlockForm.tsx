@@ -51,6 +51,11 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
   const { control, handleSubmit, reset } = useForm<ContentBlock>({
     defaultValues: {
       ...block,
+      content: block.content || '',
+      imageUrl: block.imageUrl || '',
+      imageAlt: block.imageAlt || '',
+      videoUrl: block.videoUrl || '',
+      videoTitle: block.videoTitle || '',
       level: block.level || 2,
       language: block.language || 'javascript',
     },
@@ -59,24 +64,32 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
   useEffect(() => {
     reset({
       ...block,
+      content: block.content || '',
+      imageUrl: block.imageUrl || '',
+      imageAlt: block.imageAlt || '',
+      videoUrl: block.videoUrl || '',
+      videoTitle: block.videoTitle || '',
       level: block.level || 2,
       language: block.language || 'javascript',
     });
     setListItems(block.items || []);
   }, [block, reset]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ContentBlock & { level?: string | number; language?: string }) => {
     const updatedBlock: ContentBlock = {
-      ...data,
+      id: data.id,
+      type: data.type,
+      content: data.content || '', // Ensure content is preserved
       level: data.type === 'heading' ? Number(data.level) : undefined,
       items: data.type === 'list' ? listItems : undefined,
       // Ensure all optional fields are properly set
-      imageUrl: data.type === 'image' ? data.imageUrl : undefined,
-      imageAlt: data.type === 'image' ? data.imageAlt : undefined,
-      videoUrl: data.type === 'video' ? data.videoUrl : undefined,
-      videoTitle: data.type === 'video' ? data.videoTitle : undefined,
-      language: data.type === 'code' ? data.language : undefined,
+      imageUrl: data.type === 'image' ? (data.imageUrl || '') : undefined,
+      imageAlt: data.type === 'image' ? (data.imageAlt || '') : undefined,
+      videoUrl: data.type === 'video' ? (data.videoUrl || '') : undefined,
+      videoTitle: data.type === 'video' ? (data.videoTitle || '') : undefined,
+      language: data.type === 'code' ? (data.language || 'javascript') : undefined,
     };
+
     onSave(updatedBlock);
   };
 
@@ -269,18 +282,18 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-4">
           {renderFields()}
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit">
+            <Button type="button" onClick={handleSubmit(onSubmit)}>
               Save Block
             </Button>
           </DialogFooter>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
