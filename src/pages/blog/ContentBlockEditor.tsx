@@ -26,6 +26,7 @@ const blockTypeLabels: Record<ContentBlockType, string> = {
   code: 'Code Block',
   quote: 'Quote',
   list: 'List',
+  link: 'Link',
 };
 
 export const ContentBlockEditor: React.FC<ContentBlockEditorProps> = ({ blocks, onChange }) => {
@@ -42,6 +43,7 @@ export const ContentBlockEditor: React.FC<ContentBlockEditorProps> = ({ blocks, 
       ...(type === 'heading' && { level: 2 }),
       ...(type === 'code' && { language: 'javascript' }),
       ...(type === 'list' && { items: [] }),
+      ...(type === 'link' && { linkTitle: '', linkUrl: '', linkImage: '' }),
     };
     onChange([...blocks, newBlock]);
     setEditingIndex(blocks.length);

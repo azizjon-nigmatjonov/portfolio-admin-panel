@@ -56,6 +56,9 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
       imageAlt: block.imageAlt || '',
       videoUrl: block.videoUrl || '',
       videoTitle: block.videoTitle || '',
+      linkTitle: block.linkTitle || '',
+      linkUrl: block.linkUrl || '',
+      linkImage: block.linkImage || '',
       level: block.level || 2,
       language: block.language || 'javascript',
     },
@@ -69,6 +72,9 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
       imageAlt: block.imageAlt || '',
       videoUrl: block.videoUrl || '',
       videoTitle: block.videoTitle || '',
+      linkTitle: block.linkTitle || '',
+      linkUrl: block.linkUrl || '',
+      linkImage: block.linkImage || '',
       level: block.level || 2,
       language: block.language || 'javascript',
     });
@@ -88,6 +94,9 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
       videoUrl: data.type === 'video' ? (data.videoUrl || '') : undefined,
       videoTitle: data.type === 'video' ? (data.videoTitle || '') : undefined,
       language: data.type === 'code' ? (data.language || 'javascript') : undefined,
+      linkTitle: data.type === 'link' ? (data.linkTitle || '') : undefined,
+      linkUrl: data.type === 'link' ? (data.linkUrl || '') : undefined,
+      linkImage: data.type === 'link' ? (data.linkImage || '') : undefined,
     };
 
     onSave(updatedBlock);
@@ -165,6 +174,36 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
               name="content"
               label="Caption (optional)"
               placeholder="Image caption"
+            />
+          </div>
+        );
+
+      case 'link':
+        return (
+          <div className="space-y-4">
+            <HFInput
+              control={control}
+              name="linkTitle"
+              label="Link Title"
+              placeholder="e.g., View Project"
+              required
+            />
+            <HFInput
+              control={control}
+              name="linkUrl"
+              label="Link URL"
+              placeholder="https://example.com"
+              type="url"
+              required
+              helperText="Full URL for the link target"
+            />
+            <HFInput
+              control={control}
+              name="linkImage"
+              label="Link Image (optional)"
+              placeholder="https://example.com/preview.jpg"
+              type="url"
+              helperText="Preview image for the link (optional)"
             />
           </div>
         );

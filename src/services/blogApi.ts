@@ -1,7 +1,7 @@
 import { apiClient } from '@/shared/api/client';
 
 // Content Block Types
-export type ContentBlockType = 'paragraph' | 'heading' | 'image' | 'video' | 'code' | 'quote' | 'list';
+export type ContentBlockType = 'paragraph' | 'heading' | 'image' | 'video' | 'code' | 'quote' | 'list' | 'link';
 
 export type ContentBlock = {
   id: string;
@@ -14,6 +14,10 @@ export type ContentBlock = {
   videoTitle?: string; // For videos
   language?: string; // For code blocks
   items?: string[]; // For lists
+  // Link block
+  linkTitle?: string;
+  linkUrl?: string;
+  linkImage?: string;
 };
 
 // Author Type
