@@ -103,12 +103,16 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
   };
 
   const handleAddListItem = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && listItemInput.trim()) {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      if (!listItems.includes(listItemInput.trim())) {
-        setListItems([...listItems, listItemInput.trim()]);
+      e.stopPropagation(); // Prevent Dialog from treating Enter as "submit"
+      const trimmed = listItemInput.trim();
+      if (trimmed) {
+        setListItems((prev) =>
+          prev.includes(trimmed) ? prev : [...prev, trimmed]
+        );
+        setListItemInput('');
       }
-      setListItemInput('');
     }
   };
 
@@ -280,14 +284,33 @@ export const ContentBlockForm: React.FC<ContentBlockFormProps> = ({ block, onSav
             />
             <div>
               <label className="block text-sm font-medium mb-2">List Items</label>
-              <input
-                type="text"
-                value={listItemInput}
-                onChange={(e) => setListItemInput(e.target.value)}
-                onKeyDown={handleAddListItem}
-                placeholder="Type and press Enter to add item"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={listItemInput}
+                  onChange={(e) => setListItemInput(e.target.value)}
+                  onKeyDown={handleAddListItem}
+                  placeholder="Type and press Enter to add item"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="New list item"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const trimmed = listItemInput.trim();
+                    if (trimmed) {
+                      setListItems((prev) =>
+                        prev.includes(trimmed) ? prev : [...prev, trimmed]
+                      );
+                      setListItemInput('');
+                    }
+                  }}
+                >
+                  Add
+                </Button>
+              </div>
               <div className="flex flex-col gap-2 mt-2">
                 {listItems.map((item, index) => (
                   <Badge key={index} variant="outline" className="flex items-center gap-1 justify-between p-2">
