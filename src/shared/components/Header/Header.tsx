@@ -20,29 +20,28 @@ export const Header: React.FC = () => {
   }, []);
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Left side */}
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleSidebar}
-              className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-            >
+    <header className="flex h-16 shrink-0 items-center gap-4 border-b border-border px-6">
+      <div className="flex flex-1 items-center justify-between">
+        {/* Left side */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
 
-            <div className="text-sm text-gray-500">
-              Welcome back, <span className="font-medium text-gray-900">{userInfo?.name}</span>
+            <div className="text-sm text-muted-foreground">
+              Welcome back, <span className="font-medium text-foreground">{userInfo?.name}</span>
             </div>
           </div>
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
             {/* Notifications */}
-            <button className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+            <button className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -57,7 +56,7 @@ export const Header: React.FC = () => {
             <div className="relative">
               <div className="flex items-center space-x-3">
                 <div className="flex-shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
                     {userInfo?.profilePicture ? (
                       <img src={userInfo?.profilePicture} alt="Profile" className="h-8 w-8 rounded-full object-cover" />
                     ) : (
@@ -68,8 +67,8 @@ export const Header: React.FC = () => {
                   </div>
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-medium text-gray-700">{userInfo?.name}</p>
-                  <p className="text-xs text-gray-500">{userInfo?.email}</p>
+                  <p className="text-sm font-medium text-foreground">{userInfo?.name}</p>
+                  <p className="text-xs text-muted-foreground">{userInfo?.email}</p>
                 </div>
               </div>
             </div>
@@ -79,7 +78,6 @@ export const Header: React.FC = () => {
             </Button>
           </div>
         </div>
-      </div>
     </header>
   );
 };

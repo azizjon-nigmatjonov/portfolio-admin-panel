@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 import { persist } from 'zustand/middleware';
 
 // Global app state interface
@@ -123,22 +124,34 @@ export const useAppStore = create<AppState>()(
 
 // Selector hooks for better performance
 export const useTheme = () => useAppStore((state) => state.theme);
-export const useSidebar = () => useAppStore((state) => ({
-  sidebarOpen: state.sidebarOpen,
-  setSidebarOpen: state.setSidebarOpen,
-  toggleSidebar: state.toggleSidebar,
-}));
-export const useNotifications = () => useAppStore((state) => ({
-  notifications: state.notifications,
-  addNotification: state.addNotification,
-  removeNotification: state.removeNotification,
-  clearNotifications: state.clearNotifications,
-}));
-export const useGlobalLoading = () => useAppStore((state) => ({
-  globalLoading: state.globalLoading,
-  setGlobalLoading: state.setGlobalLoading,
-}));
-export const useUserPreferences = () => useAppStore((state) => ({
-  preferences: state.preferences,
-  updatePreferences: state.updatePreferences,
-}));
+export const useSidebar = () =>
+  useAppStore(
+    useShallow((state) => ({
+      sidebarOpen: state.sidebarOpen,
+      setSidebarOpen: state.setSidebarOpen,
+      toggleSidebar: state.toggleSidebar,
+    }))
+  );
+export const useNotifications = () =>
+  useAppStore(
+    useShallow((state) => ({
+      notifications: state.notifications,
+      addNotification: state.addNotification,
+      removeNotification: state.removeNotification,
+      clearNotifications: state.clearNotifications,
+    }))
+  );
+export const useGlobalLoading = () =>
+  useAppStore(
+    useShallow((state) => ({
+      globalLoading: state.globalLoading,
+      setGlobalLoading: state.setGlobalLoading,
+    }))
+  );
+export const useUserPreferences = () =>
+  useAppStore(
+    useShallow((state) => ({
+      preferences: state.preferences,
+      updatePreferences: state.updatePreferences,
+    }))
+  );

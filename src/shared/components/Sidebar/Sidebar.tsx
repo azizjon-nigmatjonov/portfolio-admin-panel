@@ -57,21 +57,19 @@ export const Sidebar: React.FC = () => {
   return (
     <div
       className={cn(
-        'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out',
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-16'
+        'fixed inset-y-0 left-0 z-10 flex h-screen min-h-0 flex-col border-r border-border bg-card transition-all duration-200',
+        sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-16'
       )}
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
-        <div className="flex h-16 items-center justify-center border-b border-gray-200">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">P</span>
-            </div>
-            {sidebarOpen && (
-              <span className="text-lg font-semibold text-gray-900">Portfolio Admin</span>
-            )}
+        <div className="flex h-16 items-center gap-3 border-b border-border p-4">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <span className="font-bold text-lg">P</span>
           </div>
+          {sidebarOpen && (
+            <span className="text-sm font-semibold text-foreground tracking-tight">Portfolio Admin</span>
+          )}
         </div>
 
         {/* Navigation */}
@@ -84,13 +82,12 @@ export const Sidebar: React.FC = () => {
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors',
-                  isActive
-                    ? 'bg-primary-100 text-primary-900'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                  !sidebarOpen && 'justify-center px-2'
                 )}
               >
-                <span className={cn('flex-shrink-0', sidebarOpen ? 'mr-3' : 'mx-auto')}>
+                <span className={cn('flex-shrink-0', sidebarOpen ? 'mr-0' : 'mx-auto')}>
                   {getIcon(item.icon)}
                 </span>
                 {sidebarOpen && (
@@ -102,8 +99,8 @@ export const Sidebar: React.FC = () => {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4">
-          <div className="text-xs text-gray-500 text-center">
+        <div className="border-t border-border p-4">
+          <div className="text-xs text-muted-foreground text-center">
             {sidebarOpen && (
               <div>
                 <p>Portfolio Admin</p>
