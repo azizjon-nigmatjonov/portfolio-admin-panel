@@ -82,8 +82,10 @@ export const Sidebar: React.FC = () => {
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200',
                   isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                  isActive && !sidebarOpen && 'border-l-2 border-l-primary',
+                  isActive && sidebarOpen && 'border-l-2 border-l-primary -ml-0.5 pl-3.5',
                   !sidebarOpen && 'justify-center px-2'
                 )}
               >

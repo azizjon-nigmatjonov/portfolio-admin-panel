@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { User, Mail, Briefcase, Code } from 'lucide-react';
 
 const ExperiencePage: React.FC = () => {
@@ -44,9 +45,15 @@ const ExperiencePage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {sections.map((section) => (
-          <Link key={section.href} to={section.href}>
-            <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+        {sections.map((section, index) => (
+          <motion.div
+            key={section.href}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.08 }}
+          >
+            <Link to={section.href}>
+            <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-border cursor-pointer">
               <div className="flex items-start space-x-4">
                 <div className={`${section.color} text-white p-3 rounded-lg`}>
                   {section.icon}
@@ -61,7 +68,8 @@ const ExperiencePage: React.FC = () => {
                 </div>
               </div>
             </div>
-          </Link>
+            </Link>
+          </motion.div>
         ))}
       </div>
     </div>

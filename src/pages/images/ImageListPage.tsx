@@ -8,6 +8,8 @@ import {
 import { Trash2 } from 'lucide-react';
 import { imagesApi, type ImageItem } from '@/services/imagesApi';
 import { Button } from '@/shared/components/ui/button';
+import { motion } from 'framer-motion';
+import { TableRowSkeleton } from '@/shared/components/ui/table';
 
 const columnHelper = createColumnHelper<ImageItem>();
 
@@ -175,18 +177,35 @@ const ImageListPage: React.FC = () => {
               ))}
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="hover:bg-gray-50">
-                  {row.getVisibleCells().map((cell, cellIndex) => (
-                    <td key={row.id + cellIndex} className="px-6 py-4 whitespace-nowrap">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
+              {loading ? (
+                <>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <TableRowSkeleton key={i} columnCount={6} className="border-gray-200" />
                   ))}
-                </tr>
-              ))}
+                </>
+              ) : (
+                table.getRowModel().rows.map((row, index) => (
+                  <motion.tr
+                    key={row.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.2,
+                      delay: Math.min(index * 0.04, 0.4),
+                    }}
+                    className="border-b border-gray-200 transition-colors hover:bg-gray-50"
+                  >
+                    {row.getVisibleCells().map((cell, cellIndex) => (
+                      <td key={row.id + cellIndex} className="px-6 py-4 whitespace-nowrap">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </motion.tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

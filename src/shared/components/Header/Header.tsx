@@ -1,13 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useLocation } from 'react-router-dom';
 import { useSidebar } from '@/app/store';
 import { Button } from '@/shared/components/Button/Button';
 import { useProfileLogic } from '@/pages/profile/Logic';
 
+const routeTitles: Record<string, { title: string; description?: string }> = {
+  '/profile': { title: 'Profile', description: 'Manage your profile' },
+  '/portfolio': { title: 'Portfolio', description: 'Manage portfolio items' },
+  '/experience': { title: 'Experience', description: 'Experience management' },
+  '/experience/about-me': { title: 'About Me', description: 'Personal introduction' },
+  '/experience/contacts': { title: 'Contacts', description: 'Contact information' },
+  '/experience/experiences': { title: 'Experiences', description: 'Work experience' },
+  '/experience/skills': { title: 'Skills', description: 'Skills & proficiencies' },
+  '/blog': { title: 'Blog', description: 'Blog posts' },
+  '/images': { title: 'Images', description: 'Image library' },
+  '/settings': { title: 'Settings', description: 'App settings' },
+};
+
+function getPageTitle(pathname: string): { title: string; description?: string } {
+  if (routeTitles[pathname]) return routeTitles[pathname];
+  const base = Object.keys(routeTitles).find((k) => pathname.startsWith(k + '/'));
+  if (base) return routeTitles[base];
+  return { title: 'Admin', description: '' };
+}
+
 export const Header: React.FC = () => {
   const { logout } = useAuth();
+  const location = useLocation();
   const { userInfo, fetchUserInfo } = useProfileLogic();
   const { toggleSidebar } = useSidebar();
+  const { title, description } = useMemo(() => getPageTitle(location.pathname), [location.pathname]);
 
   const handleLogout = async () => {
     await logout();
@@ -33,7 +57,23 @@ export const Header: React.FC = () => {
               </svg>
             </button>
 
-            <div className="text-sm text-muted-foreground">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 4 }}
+                transition={{ duration: 0.15 }}
+                className="flex flex-col"
+              >
+                <h1 className="text-sm font-semibold text-foreground">{title}</h1>
+                {description && (
+                  <p className="text-xs text-muted-foreground">{description}</p>
+                )}
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="text-sm text-muted-foreground hidden sm:block">
               Welcome back, <span className="font-medium text-foreground">{userInfo?.name}</span>
             </div>
           </div>
