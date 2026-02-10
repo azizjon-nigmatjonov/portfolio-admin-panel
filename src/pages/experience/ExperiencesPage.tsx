@@ -246,7 +246,7 @@ const ExperiencesPage: React.FC = () => {
               {loading ? (
                 <>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <TableRowSkeleton key={i} columnCount={5} className="border-gray-200" />
+                    <TableRowSkeleton key={i} rowIndex={i} columnCount={5} className="border-gray-200" />
                   ))}
                 </>
               ) : (

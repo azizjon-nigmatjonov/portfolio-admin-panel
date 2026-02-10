@@ -180,7 +180,7 @@ const ImageListPage: React.FC = () => {
               {loading ? (
                 <>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <TableRowSkeleton key={i} columnCount={6} className="border-gray-200" />
+                    <TableRowSkeleton key={i} rowIndex={i} columnCount={6} className="border-gray-200" />
                   ))}
                 </>
               ) : (

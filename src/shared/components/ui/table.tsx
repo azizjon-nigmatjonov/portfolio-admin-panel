@@ -65,15 +65,23 @@ TableCell.displayName = "TableCell";
 function TableRowSkeleton({
   columnCount = 1,
   className,
+  rowIndex = 0,
 }: {
   columnCount?: number;
   className?: string;
+  rowIndex?: number;
 }) {
   return (
     <TableRow className={className}>
       {Array.from({ length: columnCount }).map((_, i) => (
-        <TableCell key={i}>
-          <div className="h-4 rounded bg-muted/60 animate-pulse" />
+        <TableCell key={i} className="px-6 py-4">
+          <div
+            className="h-4 rounded bg-muted/80 animate-skeleton-pulse"
+            style={{
+              width: i === 0 ? "60%" : i === columnCount - 1 ? "20%" : "85%",
+              animationDelay: `${(rowIndex * 0.08 + i * 0.03) % 1.5}s`,
+            }}
+          />
         </TableCell>
       ))}
     </TableRow>
